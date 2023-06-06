@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "pkg/pb";
+
+package pb;
+
+enum Status {
+  TODO = 0;
+  IN_PROGRESS = 1;
+  DONE = 2;
+  INVALID = 3;
+}
+
+message Item {
+  uint64 id = 1;
+  string name = 2;
+  string description = 3;
+  string notes = 4;
+  Status status = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
+}
+
+message CreateItemRequest {
+  string name = 1;
+  string description = 2;
+  string notes = 3;
+}
+
+message CreateItemResponse {
+  uint64 id = 1;
+}
+
+message UpdateItemRequest {
+  uint64 id = 1;
+  string name = 2;
+  string description = 3;
+  string notes = 4;
+  Status status = 5;
+}
+
+message DeleteItemRequest {
+  uint64 id = 1;
+}
+
+message DeleteItemResponse {
+
+}
+
+message FindItemRequest {
+  uint64 id = 1;
+}
+
+message ViewItemListRequest {
+  optional Status status = 1;
+}
+
+message ViewItemListResponse {
+  uint32 total = 1;
+  repeated Item items = 2;
+}
+
+service TodoService {
+  rpc CreateItem(CreateItemRequest) returns (CreateItemResponse);
+  rpc UpdateItem(UpdateItemRequest) returns (Item);
+  rpc DeleteItem(DeleteItemRequest) returns (DeleteItemResponse);
+  rpc FindItemByID(FindItemRequest) returns (Item);
+  rpc ViewItemList(ViewItemListRequest) returns (ViewItemListResponse);
+}
