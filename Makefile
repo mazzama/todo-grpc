@@ -7,3 +7,6 @@ compile: ## Compile the proto file.
 run: ## Build and run server.
 	go build -race -ldflags "-s -w" -o bin/server cmd/server/main.go
 	bin/server
+
+test.unit: ## run unit test
+	go test ./...
