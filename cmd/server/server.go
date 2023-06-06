@@ -18,6 +18,7 @@ type Server struct {
 	Port        int
 	DBConn      *gorm.DB
 	ServerReady chan bool
+	Server      *grpc.Server
 }
 
 // Start start grpc server
@@ -44,6 +45,7 @@ func (s *Server) Start() {
 		}
 
 		if s.ServerReady != nil {
+			s.Server = server
 			s.ServerReady <- true
 		}
 	}()
