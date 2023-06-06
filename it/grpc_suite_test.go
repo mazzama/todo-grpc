@@ -103,7 +103,10 @@ func setupServer(ctx context.Context, port int) (pb.TodoServiceClient, func()) {
 	itemService := service.NewItemService(itemRepository)
 
 	appServer := grpc.NewServer()
-	handler.NewTodoServerGrpc(appServer, itemService)
+	todoServerGrpc := handler.NewTodoServerGrpc(itemService)
+
+	pb.RegisterTodoServiceServer(appServer, todoServerGrpc)
+
 	go func() {
 		if err := appServer.Serve(lis); err != nil {
 			log.Printf("Server exited with error: %v", err)

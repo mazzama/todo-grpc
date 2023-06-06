@@ -6,6 +6,7 @@ import (
 	"github.com/mazzama/todo-grpc/internal/todo/handler"
 	"github.com/mazzama/todo-grpc/internal/todo/repository"
 	"github.com/mazzama/todo-grpc/internal/todo/service"
+	"github.com/mazzama/todo-grpc/pkg/pb"
 	"google.golang.org/grpc"
 	"gorm.io/gorm"
 	"log"
@@ -36,7 +37,9 @@ func (s *Server) Start() {
 	}
 
 	server := grpc.NewServer()
-	handler.NewTodoServerGrpc(server, itemService)
+	todoServerGrpc := handler.NewTodoServerGrpc(itemService)
+
+	pb.RegisterTodoServiceServer(server, todoServerGrpc)
 
 	// Start the server in a separate goroutine
 	go func() {

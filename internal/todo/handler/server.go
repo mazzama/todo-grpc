@@ -5,7 +5,6 @@ import (
 	"github.com/mazzama/todo-grpc/internal/todo/model"
 	"github.com/mazzama/todo-grpc/internal/todo/service"
 	"github.com/mazzama/todo-grpc/pkg/pb"
-	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -14,10 +13,8 @@ type AppTodoServer struct {
 	service service.ItemService
 }
 
-func NewTodoServerGrpc(grpcServer *grpc.Server, itemService service.ItemService) {
-	todoServer := &AppTodoServer{service: itemService}
-
-	pb.RegisterTodoServiceServer(grpcServer, todoServer)
+func NewTodoServerGrpc(itemService service.ItemService) *AppTodoServer {
+	return &AppTodoServer{service: itemService}
 }
 
 func (s *AppTodoServer) CreateItem(ctx context.Context, in *pb.CreateItemRequest) (*pb.CreateItemResponse, error) {
