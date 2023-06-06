@@ -16,7 +16,7 @@ import (
 )
 
 func main() {
-	err := config.NewAppConfig("config")
+	err := config.NewAppConfig("./config", "config")
 	if err != nil {
 		panic(fmt.Errorf("failed to get app config: %v", err))
 	}

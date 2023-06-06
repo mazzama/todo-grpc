@@ -10,3 +10,6 @@ run: ## Build and run server.
 
 test.unit: ## run unit test
 	go test ./...
+
+test.integration:
+	go test -tags=integration ./it -v -count=1
