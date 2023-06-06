@@ -1,0 +1,16 @@
+app:
+  port: 8082
+  timezone: Asia/Jakarta
+  serviceName: app-todo
+
+database:
+  postgres:
+    host: localhost
+    user: postgres
+    password: postgres_password
+    dbName: postgres
+    port: 5432
+    sslMode: disable
+    connectionMaxLifetime: 10
+    connectionMaxOpen: 10
+    connectionMaxIdle: 5
