@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"context"
@@ -6,34 +6,30 @@ import (
 	"github.com/mazzama/todo-grpc/internal/todo/handler"
 	"github.com/mazzama/todo-grpc/internal/todo/repository"
 	"github.com/mazzama/todo-grpc/internal/todo/service"
-	"github.com/mazzama/todo-grpc/pkg/config"
-	"github.com/mazzama/todo-grpc/pkg/database"
 	"google.golang.org/grpc"
+	"gorm.io/gorm"
 	"log"
 	"net"
 	"os"
 	"os/signal"
 )
 
-func main() {
-	err := config.NewAppConfig("config")
-	if err != nil {
-		panic(fmt.Errorf("failed to get app config: %v", err))
-	}
+type Server struct {
+	Port        int
+	DBConn      *gorm.DB
+	ServerReady chan bool
+	Server      *grpc.Server
+}
 
-	db, err := database.InitPostgres()
-	if err != nil {
-		log.Fatalln(err)
-		return
-	}
-
-	itemRepository := repository.NewItemRepository(db)
+// Start start grpc server
+func (s *Server) Start() {
+	itemRepository := repository.NewItemRepository(s.DBConn)
 	itemService := service.NewItemService(itemRepository)
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
 
-	listener, err := net.Listen("tcp", ":5000")
+	listener, err := net.Listen("tcp", fmt.Sprintf(":%v", s.Port))
 	if err != nil {
 		log.Fatalln(err)
 		return
@@ -46,6 +42,11 @@ func main() {
 	go func() {
 		if err := server.Serve(listener); err != nil {
 			log.Fatalf("failed to serve: %v", err)
+		}
+
+		if s.ServerReady != nil {
+			s.Server = server
+			s.ServerReady <- true
 		}
 	}()
 

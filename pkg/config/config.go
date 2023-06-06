@@ -5,10 +5,10 @@ import (
 	"github.com/spf13/viper"
 )
 
-func NewAppConfig(fileName string) error {
+func NewAppConfig(path, fileName string) error {
 	viper.SetConfigName(fileName)
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath("./config")
+	viper.AddConfigPath(path)
 
 	if err := viper.ReadInConfig(); err != nil {
 		return err
