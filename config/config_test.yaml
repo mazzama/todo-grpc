@@ -5,11 +5,11 @@ app:
 
 database:
   postgres:
-    host: db
+    host: localhost
     user: postgres
     password: 123456
     dbName: postgres
-    port: 5432
+    port: 54321
     sslMode: disable
     connectionMaxLifetime: 10
     connectionMaxOpen: 10

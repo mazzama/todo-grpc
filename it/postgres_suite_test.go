@@ -27,7 +27,7 @@ type PostgresRepositoryTestSuite struct {
 }
 
 func (p *PostgresRepositoryTestSuite) SetupSuite() {
-	err := config.NewAppConfig("./../config", "config")
+	err := config.NewAppConfig("./../config", "config_test")
 	if err != nil {
 		panic(fmt.Errorf("failed to get app config: %v", err))
 	}
