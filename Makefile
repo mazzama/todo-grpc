@@ -7,8 +7,20 @@ run: ## Build and run server.
 	go build -race -ldflags "-s -w" -o bin/server cmd/main.go
 	bin/server
 
+.PHONY: test.unit
 test.unit: ## run unit test
 	go test ./...
 
-test.integration:  ## run integration test
+.PHONY: test.integration
+test.integration: docker.app.stop
 	go test -tags=integration ./it -v -count=1
+
+docker.start:
+		docker-compose up -d
+
+docker.stop:
+		docker-compose down -v
+
+docker.app.stop:
+		docker stop todo-app
+
