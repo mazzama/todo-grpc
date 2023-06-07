@@ -15,12 +15,15 @@ test.unit: ## run unit test
 test.integration: docker.app.stop
 	go test -tags=integration ./it -v -count=1
 
+.PHONY: docker.start
 docker.start:
 		docker-compose up -d
 
+.PHONY: docker.stop
 docker.stop:
 		docker-compose down -v
 
+.PHONY: docker.app.stop
 docker.app.stop:
 		docker stop todo-app
 
